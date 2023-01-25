@@ -10,5 +10,5 @@ setup(
     version='0.0.1',
     license='GPLv3',
     description='Microsoft Excel functions in Python',
-    long_description=open('README.txt').read(),
+    long_description=open('README.md').read(),
 )

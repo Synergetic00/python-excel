@@ -399,9 +399,159 @@ def ARRAYTOTEXT():
     '''Returns an array of text values from any specified range'''
     pass
 
-def ASC():
+FULL_HALF_WIDTH_MAP = {
+    'ガ': 'ｶﾞ',
+    'ギ': 'ｷﾞ',
+    'グ': 'ｸﾞ',
+    'ゲ': 'ｹﾞ',
+    'ゴ': 'ｺﾞ',
+    'ザ': 'ｻﾞ',
+    'ジ': 'ｼﾞ',
+    'ズ': 'ｽﾞ',
+    'ゼ': 'ｾﾞ',
+    'ゾ': 'ｿﾞ',
+    'ダ': 'ﾀﾞ',
+    'ヂ': 'ﾁﾞ',
+    'ヅ': 'ﾂﾞ',
+    'デ': 'ﾃﾞ',
+    'ド': 'ﾄﾞ',
+    'バ': 'ﾊﾞ',
+    'ビ': 'ﾋﾞ',
+    'ブ': 'ﾌﾞ',
+    'ベ': 'ﾍﾞ',
+    'ボ': 'ﾎﾞ',
+    'パ': 'ﾊﾟ',
+    'ピ': 'ﾋﾟ',
+    'プ': 'ﾌﾟ',
+    'ペ': 'ﾍﾟ',
+    'ポ': 'ﾎﾟ',
+    'ヴ': 'ｳﾞ',
+    'ァ': 'ｧ',
+    'ィ': 'ｨ',
+    'ゥ': 'ｩ',
+    'ェ': 'ｪ',
+    'ォ': 'ｫ',
+    'ッ': 'ｯ',
+    'ャ': 'ｬ',
+    'ュ': 'ｭ',
+    'ョ': 'ｮ',
+    'ヮ': 'ﾜ',
+    'ヰ': 'ｲ',
+    'ヱ': 'ｴ',
+    '・': '･',
+    'ー': 'ｰ',
+    '、': '､',
+    '。': '｡',
+    '・': '･',
+    '「': '｢',
+    '」': '｣',
+    'ア': 'ｱ',
+    'イ': 'ｲ',
+    'ウ': 'ｳ',
+    'エ': 'ｴ',
+    'オ': 'ｵ',
+    'カ': 'ｶ',
+    'キ': 'ｷ',
+    'ク': 'ｸ',
+    'ケ': 'ｹ',
+    'コ': 'ｺ',
+    'サ': 'ｻ',
+    'シ': 'ｼ',
+    'ス': 'ｽ',
+    'セ': 'ｾ',
+    'ソ': 'ｿ',
+    'タ': 'ﾀ',
+    'チ': 'ﾁ',
+    'ツ': 'ﾂ',
+    'テ': 'ﾃ',
+    'ト': 'ﾄ',
+    'ナ': 'ﾅ',
+    'ニ': 'ﾆ',
+    'ヌ': 'ﾇ',
+    'ネ': 'ﾈ',
+    'ノ': 'ﾉ',
+    'ハ': 'ﾊ',
+    'ヒ': 'ﾋ',
+    'フ': 'ﾌ',
+    'ヘ': 'ﾍ',
+    'ホ': 'ﾎ',
+    'マ': 'ﾏ',
+    'ミ': 'ﾐ',
+    'ム': 'ﾑ',
+    'メ': 'ﾒ',
+    'モ': 'ﾓ',
+    'ヤ': 'ﾔ',
+    'ユ': 'ﾕ',
+    'ヨ': 'ﾖ',
+    'ラ': 'ﾗ',
+    'リ': 'ﾘ',
+    'ル': 'ﾙ',
+    'レ': 'ﾚ',
+    'ロ': 'ﾛ',
+    'ワ': 'ﾜ',
+    'ヲ': 'ｦ',
+    'ン': 'ﾝ',
+    'ガ': 'ｶﾞ',
+    'ギ': 'ｷﾞ',
+    'グ': 'ｸﾞ',
+    'ゲ': 'ｹﾞ',
+    'ゴ': 'ｺﾞ',
+    'ザ': 'ｻﾞ',
+    'ジ': 'ｼﾞ',
+    'ズ': 'ｽﾞ',
+    'ゼ': 'ｾﾞ',
+    'ゾ': 'ｿﾞ',
+    'ダ': 'ﾀﾞ',
+    'ヂ': 'ﾁﾞ',
+    'ヅ': 'ﾂﾞ',
+    'デ': 'ﾃﾞ',
+    'ド': 'ﾄﾞ',
+    'バ': 'ﾊﾞ',
+    'ビ': 'ﾋﾞ',
+    'ブ': 'ﾌﾞ',
+    'ベ': 'ﾍﾞ',
+    'ボ': 'ﾎﾞ',
+    'パ': 'ﾊﾟ',
+    'ピ': 'ﾋﾟ',
+    'プ': 'ﾌﾟ',
+    'ペ': 'ﾍﾟ',
+    'ポ': 'ﾎﾟ',
+    'ヴ': 'ｳﾞ',
+    'ァ': 'ｧ',
+    'ィ': 'ｨ',
+    'ゥ': 'ｩ',
+    'ェ': 'ｪ',
+    'ォ': 'ｫ',
+    'ッ': 'ｯ',
+    'ャ': 'ｬ',
+    'ュ': 'ｭ',
+    'ョ': 'ｮ',
+    'ヮ': 'ﾜ',
+    'ヰ': 'ｲ',
+    'ヱ': 'ｴ',
+    '・': '･',
+    'ー': 'ｰ',
+    '、': '､',
+    '。': '｡',
+    '・': '･',
+    '「': '｢',
+    '」': '｣'
+}
+
+def ASC(text: str) -> str:
     '''Changes full-width (double-byte) English letters or katakana within a character string to half-width (single-byte) characters'''
-    pass
+    output = ''
+    for char in text:
+        code = ord(char)
+        if code == 0x3000:
+            output += chr(0x20)
+        elif code >= (0x21 + 0xFEE0) and code <= (0x7F + 0xFEE0):
+            output += chr(code - 0xFEE0)
+        elif char in FULL_HALF_WIDTH_MAP.keys():
+            output += FULL_HALF_WIDTH_MAP[char]
+        else:
+            output += char
+    return output
 
 def ASIN():
     '''Returns the arcsine of a number'''
@@ -1544,9 +1694,20 @@ def ISPMT():
     ''''''
     pass
 
-def JIS():
-    ''''''
-    pass
+def JIS(text: str) -> str:
+    '''Converts half-width (single-byte) letters within a character string to full-width (double-byte) characters.'''
+    output = ''
+    for char in text:
+        code = ord(char)
+        if code == 0x20:
+            output += chr(0x3000)
+        elif code >= 0x21 and code <= 0x7F:
+            output += chr(code + 0xFEE0)
+        elif char in FULL_HALF_WIDTH_MAP.values():
+            output += list(filter(lambda x: FULL_HALF_WIDTH_MAP[x] == char, FULL_HALF_WIDTH_MAP))[0]
+        else:
+            output += char
+    return output
 
 def KURT():
     ''''''

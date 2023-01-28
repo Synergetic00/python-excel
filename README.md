@@ -2,12 +2,18 @@
 
 ## Install
 
-`pip install git+https://github.com/Synergetic00/python-excel.git#egg=pyxl`
+`pip install --force-reinstall git+https://github.com/Synergetic00/python-excel.git@main#egg=pyxl`
 
 ## Usage
 
 ```python
+import pyxl
 
+print(pyxl.GAUSS(1)) # about 0.3413447461
+print(pyxl.GAUSS(2)) # about 0.4772498681
+print(pyxl.GAUSS(3)) # about 0.498650102
+print(pyxl.GAUSS(4)) # about 0.4999683288
+print(pyxl.GAUSS(5)) # about 0.4999997133
 ```
 
 ## Coverage

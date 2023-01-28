@@ -426,25 +426,8 @@ FULL_HALF_WIDTH_MAP = {
     'ペ': 'ﾍﾟ',
     'ポ': 'ﾎﾟ',
     'ヴ': 'ｳﾞ',
-    'ァ': 'ｧ',
-    'ィ': 'ｨ',
-    'ゥ': 'ｩ',
-    'ェ': 'ｪ',
-    'ォ': 'ｫ',
-    'ッ': 'ｯ',
-    'ャ': 'ｬ',
-    'ュ': 'ｭ',
-    'ョ': 'ｮ',
-    'ヮ': 'ﾜ',
-    'ヰ': 'ｲ',
-    'ヱ': 'ｴ',
-    '・': '･',
-    'ー': 'ｰ',
-    '、': '､',
-    '。': '｡',
-    '・': '･',
-    '「': '｢',
-    '」': '｣',
+    'ヷ': 'ﾜﾞ',
+    'ヺ': 'ｦﾞ',
     'ア': 'ｱ',
     'イ': 'ｲ',
     'ウ': 'ｳ',
@@ -491,32 +474,6 @@ FULL_HALF_WIDTH_MAP = {
     'ワ': 'ﾜ',
     'ヲ': 'ｦ',
     'ン': 'ﾝ',
-    'ガ': 'ｶﾞ',
-    'ギ': 'ｷﾞ',
-    'グ': 'ｸﾞ',
-    'ゲ': 'ｹﾞ',
-    'ゴ': 'ｺﾞ',
-    'ザ': 'ｻﾞ',
-    'ジ': 'ｼﾞ',
-    'ズ': 'ｽﾞ',
-    'ゼ': 'ｾﾞ',
-    'ゾ': 'ｿﾞ',
-    'ダ': 'ﾀﾞ',
-    'ヂ': 'ﾁﾞ',
-    'ヅ': 'ﾂﾞ',
-    'デ': 'ﾃﾞ',
-    'ド': 'ﾄﾞ',
-    'バ': 'ﾊﾞ',
-    'ビ': 'ﾋﾞ',
-    'ブ': 'ﾌﾞ',
-    'ベ': 'ﾍﾞ',
-    'ボ': 'ﾎﾞ',
-    'パ': 'ﾊﾟ',
-    'ピ': 'ﾋﾟ',
-    'プ': 'ﾌﾟ',
-    'ペ': 'ﾍﾟ',
-    'ポ': 'ﾎﾟ',
-    'ヴ': 'ｳﾞ',
     'ァ': 'ｧ',
     'ィ': 'ｨ',
     'ゥ': 'ｩ',
@@ -526,16 +483,12 @@ FULL_HALF_WIDTH_MAP = {
     'ャ': 'ｬ',
     'ュ': 'ｭ',
     'ョ': 'ｮ',
-    'ヮ': 'ﾜ',
-    'ヰ': 'ｲ',
-    'ヱ': 'ｴ',
-    '・': '･',
-    'ー': 'ｰ',
-    '、': '､',
     '。': '｡',
-    '・': '･',
+    '、': '､',
+    'ー': 'ｰ',
     '「': '｢',
-    '」': '｣'
+    '」': '｣',
+    '・': '･'
 }
 
 def ASC(text: str) -> str:
@@ -1697,21 +1650,41 @@ def ISPMT():
 def JIS(text: str) -> str:
     '''Converts half-width (single-byte) letters within a character string to full-width (double-byte) characters.'''
     output = ''
-    for char in text:
+    char_list = list(text)
+    char_list = char_list[::-1]
+    carry = ''
+    for i in range(len(char_list)):
+        char = char_list[i]
         code = ord(char)
+        if code in [65438, 65439]:
+            carry = char
+            continue
+        outchar = char + carry
         if code == 0x20:
-            output += chr(0x3000)
+            output = chr(0x3000) + output
         elif code >= 0x21 and code <= 0x7F:
-            output += chr(code + 0xFEE0)
-        elif char in FULL_HALF_WIDTH_MAP.values():
-            output += list(filter(lambda x: FULL_HALF_WIDTH_MAP[x] == char, FULL_HALF_WIDTH_MAP))[0]
+            output = chr(code + 0xFEE0) + output
+        elif outchar in FULL_HALF_WIDTH_MAP.values():
+            output = list(filter(lambda x: FULL_HALF_WIDTH_MAP[x] == outchar, FULL_HALF_WIDTH_MAP))[0] + output
         else:
-            output += char
+            output = char + output
+        if code not in [65438, 65439]:
+            carry = ''
     return output
 
-def KURT():
-    ''''''
-    pass
+def KURT(number: int | str, *numbers: int | str):
+    '''Returns the kurtosis of a data set.'''
+    try:
+        data = [int(val) for val in [number] + list(numbers)]
+    except:
+        raise TypeError('Only integers are allowed')
+    mean = sum(data) / len(data)
+    n = len(data)
+    s = math.sqrt((sum([(x - mean) ** 2 for x in data])) / (n - 1))
+    first_constant = (n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3))
+    main_sum = sum([(((x - mean) / s) ** 4) for x in data])
+    second_constant = (3 * ((n - 1) ** 2)) / ((n - 2) * (n - 3))
+    return (first_constant * main_sum) - second_constant
 
 def LARGE():
     ''''''

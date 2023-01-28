@@ -25,8 +25,8 @@ class TestExcelFunctions(unittest.TestCase):
     def test_ACOTH(self):
         self.assertAlmostEqual(ACOTH(6), 0.168, 3)
 
-    # def test_ASC(self):
-    #     self.assertEqual(ASC('ＡＢＣａｂｃ０１２！＃＄アイウガギグ　'), 'ABCabc012!#$ｱｲｳｶﾞｷﾞｸﾞ ')
+    def test_ASC(self):
+        self.assertEqual(ASC('ＡＢＣａｂｃ０１２！＃＄アイウガギグ　'), 'ABCabc012!#$ｱｲｳｶﾞｷﾞｸﾞ ')
 
     def test_BAHTTEXT(self):
         self.assertEqual(BAHTTEXT(123), 'หนึ่งร้อยยี่สิบสามบาทถ้วน')
@@ -124,8 +124,14 @@ class TestExcelFunctions(unittest.TestCase):
     def test_HEX2OCT(self):
         self.assertEqual(HEX2OCT('A5'), '245')
 
-    # def test_JIS(self):
-    #     self.assertEqual(JIS('ABCabc012!#$ｱｲｳｶﾞｷﾞｸﾞ '), 'ＡＢＣａｂｃ０１２！＃＄アイウガギグ　')
+    def test_JIS(self):
+        self.assertEqual(JIS('ABCabc012!#$ｱｲｳｶﾞｷﾞｸﾞ '), 'ＡＢＣａｂｃ０１２！＃＄アイウガギグ　')
+        self.assertEqual(JIS('AｶﾞｷﾞｸﾞA'), 'ＡガギグＡ')
+
+    def test_KURT(self):
+        self.assertAlmostEqual(KURT(3, 4, 5, 2, 3, 4, 5, 6, 4, 7), -0.1518, 4)
+        self.assertAlmostEqual(KURT('3', '4', '5', '2', '3', '4', '5', '6', '4', '7'), -0.1518, 4)
+        self.assertAlmostEqual(KURT(3, 4, 5, 2, 3, '4', '5', '6', '4', '7'), -0.1518, 4)
 
     def test_OCT2BIN(self):
         self.assertEqual(OCT2BIN(65), '110101')

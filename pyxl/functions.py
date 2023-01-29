@@ -1672,12 +1672,12 @@ def JIS(text: str) -> str:
             carry = ''
     return output
 
-def KURT(number: int | str, *numbers: int | str):
+def KURT(number: float | str, *numbers: float | str):
     '''Returns the kurtosis of a data set.'''
     try:
-        data = [int(val) for val in [number] + list(numbers)]
+        data = [float(val) for val in [number] + list(numbers)]
     except:
-        raise TypeError('Only integers are allowed')
+        raise TypeError('Only numbers are allowed')
     mean = sum(data) / len(data)
     n = len(data)
     s = math.sqrt((sum([(x - mean) ** 2 for x in data])) / (n - 1))
@@ -1782,9 +1782,21 @@ def MDURATION():
     ''''''
     pass
 
-def MEDIAN():
-    ''''''
-    pass
+def _median(array: list[float]) -> float:
+    length = len(array)
+    if length % 2 == 0:
+        low_mid = length // 2
+        return (array[low_mid - 1] + array[low_mid]) / 2
+    else:
+        return array[length // 2]
+
+def MEDIAN(number: float | str, *numbers: float | str) -> float:
+    '''Returns the median of the given numbers. The median is the number in the middle of a set of numbers.'''
+    try:
+        data = [float(val) for val in [number] + list(numbers)]
+    except:
+        raise TypeError('Only numbers are allowed')
+    return _median(data)
 
 def MID():
     ''''''
@@ -2073,9 +2085,28 @@ def PV():
     ''''''
     pass
 
-def QUARTILE():
-    ''''''
-    pass
+def QUARTILE(array: list[float], quart: int) -> float:
+    '''Returns the quartile of a data set.'''
+    array.sort()
+    length = len(array)
+    if quart == 0:
+        return array[0]
+    elif quart == 1:
+        k = length // 4
+        if length % 4 <  2:
+            return (array[k-1] + array[k])/2
+        else:
+            return array[k-1]
+    elif quart == 2:
+        return _median(array)
+    elif quart == 3:
+        k = 3 * length // 4
+        if length % 4 <  2:
+            return (array[k] + array[k+1])/2
+        else:
+            return array[k]
+    elif quart == 4:
+        return array[-1]
 
 def QUARTILE_EXC():
     ''''''

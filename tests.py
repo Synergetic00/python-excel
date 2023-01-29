@@ -133,6 +133,10 @@ class TestExcelFunctions(unittest.TestCase):
         self.assertAlmostEqual(KURT('3', '4', '5', '2', '3', '4', '5', '6', '4', '7'), -0.1518, 4)
         self.assertAlmostEqual(KURT(3, 4, 5, 2, 3, '4', '5', '6', '4', '7'), -0.1518, 4)
 
+    def test_MEDIAN(self):
+        self.assertAlmostEqual(MEDIAN(1, 2, 3, 4, 5), 3)
+        self.assertAlmostEqual(MEDIAN(1, 2, 3, 4, 5, 6), 3.5)
+
     def test_OCT2BIN(self):
         self.assertEqual(OCT2BIN(65), '110101')
 
@@ -141,6 +145,16 @@ class TestExcelFunctions(unittest.TestCase):
 
     def test_OCT2HEX(self):
         self.assertEqual(OCT2HEX(65), '35')
+
+    # def test_QUARTILE(self):
+    #     self.assertAlmostEqual(QUARTILE([1, 2, 4, 7, 8, 9, 10, 12], 0), 1)
+    #     self.assertAlmostEqual(QUARTILE([1, 2, 4, 7, 8, 9, 10, 12], 1), 3)
+    #     self.assertAlmostEqual(QUARTILE([1, 2, 4, 7, 8, 9, 10, 12], 2), 7.5)
+    #     self.assertAlmostEqual(QUARTILE([1, 2, 4, 7, 8, 9, 10, 12], 3), 9.5)
+    #     self.assertAlmostEqual(QUARTILE([1, 2, 4, 7, 8, 9, 10, 12], 4), 12)
+    #     self.assertAlmostEqual(QUARTILE([1, 2, 4, 7, 8, 9, 10], 1), 2)
+    #     self.assertAlmostEqual(QUARTILE([1, 2, 4, 7, 8, 9, 10], 2), 7)
+    #     self.assertAlmostEqual(QUARTILE([1, 2, 4, 7, 8, 9, 10], 3), 9)
 
 if __name__ == '__main__':
     unittest.main()
